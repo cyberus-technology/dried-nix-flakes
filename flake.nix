@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 {
   description = "Dried Nix Flakes: Pure Nix library to make Flakes usable";
   outputs =

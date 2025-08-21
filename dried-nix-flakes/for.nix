@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 let
   lib = import ./lib.nix;
 

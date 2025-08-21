@@ -1,3 +1,4 @@
+# SPDX-License-Identifier: MIT
 let
   # When printing values in errors, escape them slightly using `e`.
   e = builtins.toJSON;
