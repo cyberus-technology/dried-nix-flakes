@@ -81,7 +81,7 @@ The following example shows side-by-side the "translated equivalent" for a singl
    { nixpkgs, ... }:                                        |       { nixpkgs, ... }:
                                                             | 
    {                                                        |       {
-     packages =                                             |         packages = {
+     packages = {                                           |         packages = {
        x86_64-linux = {                                     |
     /* ------------ */                                      |
          inherit (nixpkgs.legacyPackages.x86_64-linux)      |           inherit (nixpkgs.legacyPackages)
