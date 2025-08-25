@@ -73,10 +73,10 @@ The following example shows side-by-side the "translated equivalent" for a singl
   /* inputs */                                              |   /* inputs */
                                                             | 
   outputs =                                                 |   outputs =
-                                                            |     inputs:
+                                                            |     { dried-nix-flakes, nixpkgs, ... }@inputs:
                                                             |  /* ------- */
                                                             |     
-                                                            |     ((inputs.dried-nix-flakes.for inputs).exportOutputs
+                                                            |     (inputs.dried-nix-flakes.for inputs).exportOutputs (
                                                             |  /* --------------------------------------------------- */
    { nixpkgs, ... }:                                        |       { nixpkgs, ... }:
                                                             | 
