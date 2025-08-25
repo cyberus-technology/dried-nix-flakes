@@ -71,15 +71,15 @@ The following example shows side-by-side the "translated equivalent" for a singl
 # A classic Flake.                                          | # A dried-up Flake.
 {                                                           | {
   /* inputs */                                              |   /* inputs */
-                                                            | 
+                                                            |
   outputs =                                                 |   outputs =
                                                             |     { dried-nix-flakes, nixpkgs, ... }@inputs:
                                                             |  /* ------- */
-                                                            |     
+                                                            |
                                                             |     (inputs.dried-nix-flakes.for inputs).exportOutputs (
                                                             |  /* --------------------------------------------------- */
    { nixpkgs, ... }:                                        |       { nixpkgs, ... }:
-                                                            | 
+                                                            |
    {                                                        |       {
      packages = {                                           |         packages = {
        x86_64-linux = {                                     |
