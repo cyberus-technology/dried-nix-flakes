@@ -221,7 +221,7 @@ How??
 We can use conventions to do some of the inconvenient stuff.
 
 Namely, due to how Flakes inputs work,
-it is very likely that `nixpkgs` refers to the main package set *your* Flake and *your outputs use.
+it is very likely that `nixpkgs` refers to the main package set *your* Flake and *your outputs* use.
 We then use the `nixpkgs` input in the `for` utility function to seed the (default) list of systems with `lib.systems.flakeExposed`.
 
 This means that the upstream package set is the one dictating which systems are plausible.
