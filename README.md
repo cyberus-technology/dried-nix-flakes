@@ -23,7 +23,9 @@ First, by collapsing and then expanding the systems-indexed attribute sets from 
 This enables a `flake.nix` expression to implicitly use and export all systems that *by default and by convention* should.
 
 Then, this also exposes some useful helpers to further help.
-For example, `builtins.currentSystem` ***from a Flake*** will in imported expressions when using the `import` function exposed by this Flake's export functions.
+For example, using `builtins.currentSystem` can be done *from a “pure” Flake evaluation*,
+either from the injected `builtins`,
+or in imported expressions when using the injected `import` function.
 
 
 ### Basic Usage
@@ -222,7 +224,7 @@ We can use conventions to do some of the inconvenient stuff.
 
 Namely, due to how Flakes inputs work,
 it is very likely that `nixpkgs` refers to the main package set *your* Flake and *your outputs* use.
-We then use the `nixpkgs` input in the `for` utility function to seed the (default) list of systems with `lib.systems.flakeExposed`.
+We then use that particular `nixpkgs` input in the `for` utility function to seed the (default) list of systems with `lib.systems.flakeExposed`.
 
 This means that the upstream package set is the one dictating which systems are plausible.
 *Not us* (except for the fallback if `nixpkgs` is not an input).
