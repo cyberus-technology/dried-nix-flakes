@@ -418,3 +418,68 @@ Doing so is equivalent to calling `inputs: (dried-nix-flakes.for inputs).exportO
   ;
 }
 ```
+
+### Injected inputs
+
+The `exportOutput`(`s`) functions inject a couple of additional arguments in the arguments of the function they take as an argument.
+
+ - `currentSystem`, the string for the system being evaluated.
+ - `import`, augmented `import` replacement. Includes `builtins` and `import` replacements in the scope.
+ - `builtins`, with `currentSystem` and `import` overridden with the previous two values.
+
+#### `inputs.currentsystem`
+
+The `currentSystem` argument is the canonical value to use when referring to the system is required.
+It shouldn't be needed most of the time,
+as inputs collapsing and outputs expansion should already abstract this properly.
+
+#### `inputs.import`
+
+The `import` function can be used to directly evaluate standard Nix expressions that would make use of `builtins.currentSystem`.
+
+
+> **Performance concerns**
+> 
+> There may or may not be a noticeable hit in performance when using the injected `import` from `dried-nix-flakes`.
+> 
+> The injected `import` serves firstly as a convenience feature, to make working with existing and established standard Nix expressions possible.
+> 
+> Under the hood, it uses `scopedImport`,
+> which uses different semantics regarding evaluation state with imports.
+
+When using the injected `import` replacement,
+you most likely want to pass expensive evaluations (like a *Nixpkgs* evaluation) coming from the Flake's evaluation,
+so they get evaluated with the built-in `import` rather than the overridden `import`.
+Since the collapsed inputs will already have selected the proper system, there *shouldn't* be any issues regarding it trying to use `builtins.currentSystem`.
+
+> [!NOTE]
+> In this example, it is assumed that the standard Nix expression would return a (flat) attribute set of packages.
+
+```nix
+{
+  inputs.nixpkgs.url = "https://channels.nixos.org/nixos-unstable/nixexprs.tar.xz";
+  inputs.dried-nix-flakes.url = "github:cyberus-technology/dried-nix-flakes";
+
+  outputs =
+    inputs:
+    (inputs.dried-nix-flakes.for inputs).exportOutputs (
+      { nixpkgs, import /* ➊ */, ... }:
+
+      {
+        # Exposes the standard Nix evaluation for this project on `packages`.
+        packages =
+          import ./default.nix {
+            pkgs = nixpkgs.legacyPackages; /* ➋ */
+          }
+        ;
+      }
+    )
+  ;
+}
+```
+
+ 1. Brings the injected `import` into scope.
+ 2. Passes the "standard" Nixpkgs package set to the evaluated expression.
+
+The main thing to consider is how the *Flake outputs* from your *inputs* maps to the standard Nix evaluation conventions.
+Here we can see that the conventional `pkgs` (an evaluated Nixpkgs package set) is coming from `legacyPackages` for Nixpkgs.
