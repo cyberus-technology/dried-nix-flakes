@@ -1,0 +1,20 @@
+# SPDX-License-Identifier: Apache-2.0
+name: "CI"
+
+on:
+  pull_request:
+  push:
+
+jobs:
+  build:
+    name: Build (${{ matrix.os }})
+    strategy:
+      fail-fast: false
+      matrix:
+        os:
+          - ubuntu-24.04
+          - macos-13 # most recent x86_64
+          - macos-15 # most recent aarch64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: samueldr/nix-build-action@7ea8cf71ec84c6510a7a6660214bc7ee99297dc2 # latest@2025-08-25
